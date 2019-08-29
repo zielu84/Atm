@@ -18,4 +18,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUi" Version="4.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Atm.Models\Atm.Models.csproj" />
+  </ItemGroup>
+
 </Project>

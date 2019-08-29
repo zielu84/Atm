@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Atm.Services.Test
+namespace Atm.Tests.Services
 {
     public class MoneyTest
     {

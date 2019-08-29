@@ -2,8 +2,13 @@
 
 namespace Atm.Api.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
+        /// <summary>
+        /// Account Controller
+        /// </summary>
+        /// <param name="accountNumber">Bank account number</param>
+        /// <returns></returns>
         public IActionResult GetAccount(string accountNumber)
         {
             return View();

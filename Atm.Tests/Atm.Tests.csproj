@@ -21,4 +21,8 @@
     <ProjectReference Include="..\Atm.Services\Atm.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Api\" />
+  </ItemGroup>
+
 </Project>

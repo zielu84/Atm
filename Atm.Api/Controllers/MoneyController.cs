@@ -1,12 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Atm.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace Atm.Api.Controllers
 {
-    public class MoneyController : Controller
+    /// <summary>
+    /// Money Controller
+    /// </summary>
+    public class MoneyController : BaseController
     {
-        public IActionResult Withdraw(decimal amount)
+        /// <summary>
+        /// Returns withdrawal
+        /// </summary>
+        /// <param name="amount">Amount to withdraw</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("withdraw")]
+        public ActionResult<Withdrawal> Withdraw()
         {
-            return View();
+            return new Withdrawal();
         }
     }
 }
