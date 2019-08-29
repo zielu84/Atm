@@ -1,6 +1,15 @@
-﻿namespace Atm.Services.Services.Interfaces
+﻿using Atm.Models;
+using System.Threading.Tasks;
+
+namespace Atm.Services.Services.Interfaces
 {
-    interface IMoneyService
+    public interface IMoneyService
     {
+        /// <summary>
+        /// Get withdrawal object
+        /// </summary>
+        /// <param name="amount">amount of money to withdraw</param>
+        /// <returns></returns>
+        Task<Withdrawal> GetWithdrawal(decimal? amount);
     }
 }
