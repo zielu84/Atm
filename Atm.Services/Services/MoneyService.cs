@@ -1,6 +1,7 @@
 ﻿using Atm.Models;
 using Atm.Models.Exceptions;
 using Atm.Services.Services.Interfaces;
+using Atm.ViewModels;
 using System;
 using System.Threading.Tasks;
 
@@ -10,9 +11,9 @@ namespace Atm.Services.Services
     {
         private readonly decimal[] notes = new decimal[4] { 100, 50, 20, 10 };
 
-        public async Task<Withdrawal> GetWithdrawal(decimal? amount)
+        public WithdrawalViewModel ChangeMoney(decimal? amount)
         {
-            var withdrawal = new Withdrawal();
+            var withdrawal = new WithdrawalViewModel();
 
             if (amount < 0)
             {
@@ -28,7 +29,7 @@ namespace Atm.Services.Services
             {
                 if (remainAmount % note < remainAmount)
                 {
-                    withdrawal.Notes.Add(new Tuple<decimal, int>(note, (int)(remainAmount / note)));
+                    withdrawal.Notes.Add(new NoteChange(note, (int)(remainAmount / note)));
                     remainAmount %= note;
                 }
             }

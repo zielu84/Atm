@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
     <PackageReference Include="Moq" Version="4.12.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.console" Version="2.4.1">
@@ -18,11 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Atm.Api\Atm.Api.csproj" />
     <ProjectReference Include="..\Atm.Services\Atm.Services.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Api\" />
   </ItemGroup>
 
 </Project>

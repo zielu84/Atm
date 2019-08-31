@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Atm.Services.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Atm.Api.Controllers
 {
@@ -9,5 +10,13 @@ namespace Atm.Api.Controllers
     [ApiController]
     public abstract class BaseController : Controller
     {
+        protected IMoneyService MoneyService;
+        protected IBankService BankService;
+
+        public BaseController(IMoneyService moneyService, IBankService bankService)
+        {
+            MoneyService = moneyService;
+            BankService = bankService;
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Atm.Models;
+using Atm.ViewModels;
 using System.Threading.Tasks;
 
 namespace Atm.Services.Services.Interfaces
@@ -6,10 +7,10 @@ namespace Atm.Services.Services.Interfaces
     public interface IMoneyService
     {
         /// <summary>
-        /// Get withdrawal object
+        /// Change money to smaller notes
         /// </summary>
-        /// <param name="amount">amount of money to withdraw</param>
+        /// <param name="amount">amount of money to change</param>
         /// <returns></returns>
-        Task<Withdrawal> GetWithdrawal(decimal? amount);
+        WithdrawalViewModel ChangeMoney(decimal? amount);
     }
 }

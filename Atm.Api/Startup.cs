@@ -1,4 +1,6 @@
 ﻿using System.Reflection;
+using Atm.Services.Services;
+using Atm.Services.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +22,9 @@ namespace Atm.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddMvc();
+            services.AddScoped<IBankService, BankService>();
+            services.AddScoped<IMoneyService, MoneyService>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddSwaggerGen(c =>
