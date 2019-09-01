@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using Atm.Api.Extensions;
 using Atm.Services.Services;
 using Atm.Services.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -6,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NLog;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
@@ -13,17 +17,32 @@ namespace Atm.Api
 {
     public class Startup
     {
+        private readonly string CorsPolicy = "CorsPolicy";
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
         {
+            LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
             Configuration = configuration;
         }        
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IBankService, BankService>();
-            services.AddScoped<IMoneyService, MoneyService>();
+            services.AddSingleton<IBankService, BankService>();
+            services.AddSingleton<IMoneyService, MoneyService>();
+            services.AddSingleton<ILoggerManager, LoggerManager>();
+
+            var origins = Configuration.GetSection("AllowedOrigins").Get<string[]>();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(CorsPolicy,
+                    builder => builder.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials()
+                        .WithOrigins(origins)
+                );
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -41,7 +60,7 @@ namespace Atm.Api
             });
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerManager logger)
         {
             if (env.IsDevelopment())
             {
@@ -51,8 +70,10 @@ namespace Atm.Api
             {
                 app.UseHsts();
             }
+            app.UseCors(CorsPolicy);
+            //app.ConfigureExceptionHandler(logger);
+            app.ConfigureCustomExceptionMiddleware();
             app.UseHttpsRedirection();
-
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

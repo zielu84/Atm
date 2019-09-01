@@ -17,11 +17,11 @@ namespace Atm.Services.Services
 
             if (amount < 0)
             {
-                throw new InvalidArgumentException("Invalid amount", "amount");
+                throw new InvalidArgumentException("Invalid amount, cannot be negative", "amount");
             }
             if (amount % 10 > 0)
             {
-                throw new NoteUnavailableException("Invalid amount", "amount");
+                throw new NoteUnavailableException("Invalid amount, last digit must be 0", "amount");
             }
 
             decimal? remainAmount = amount;
