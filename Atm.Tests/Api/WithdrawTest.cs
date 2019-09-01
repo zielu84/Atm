@@ -22,7 +22,7 @@ namespace Atm.Tests.Services
             var controller = new WithdrawController(MoneyService, BankService);
             var request = new WithdrawRequest("1234-1234-1234", amount);
 
-            var result = controller.Withdraw(request);
+            var result = controller.WithdrawAsync(request);
 
             Assert.Equal(notesAmount, result.Notes.Any(x => x.note == value) ? 
                 result.Notes.Where(x => x.note == value).FirstOrDefault().amount : 0);

@@ -2,11 +2,14 @@
 using System.IO;
 using System.Reflection;
 using Atm.Api.Extensions;
+using Atm.Data;
 using Atm.Services.Services;
 using Atm.Services.Services.Interfaces;
+using Atmi.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
@@ -28,9 +31,13 @@ namespace Atm.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IBankService, BankService>();
-            services.AddSingleton<IMoneyService, MoneyService>();
+            services.AddScoped<IBaseRepository, BaseRepository>();
+            services.AddScoped<IBankService, BankService>();
+            services.AddScoped<IMoneyService, MoneyService>();
             services.AddSingleton<ILoggerManager, LoggerManager>();
+
+            var connection = Configuration["ConnectionString"];
+            services.AddDbContext<AtmDbContext>(options => options.UseSqlServer(connection));
 
             var origins = Configuration.GetSection("AllowedOrigins").Get<string[]>();
             services.AddCors(options =>
@@ -70,6 +77,22 @@ namespace Atm.Api
             {
                 app.UseHsts();
             }
+
+            try
+            {
+                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
+                    .CreateScope())
+                {
+                    var dbContext = serviceScope.ServiceProvider.GetService<AtmDbContext>();
+                    dbContext.Database.Migrate();
+                    DatabaseInitializer.Seed(dbContext);
+                }
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+            }
+
             app.UseCors(CorsPolicy);
             //app.ConfigureExceptionHandler(logger);
             app.ConfigureCustomExceptionMiddleware();

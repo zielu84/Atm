@@ -24,10 +24,12 @@ namespace Atm.Api.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("withdraw")]
-        public WithdrawalViewModel Withdraw([FromBody] WithdrawRequest model)
+        public async Task<WithdrawalViewModel> Withdraw([FromBody] WithdrawRequest model)
         {
+            await BankService.CheckAccountNumber(model.accountNumber);
             var changeModel = MoneyService.ChangeMoney(model.amount);
-            var withdrawModel = BankService.WithdrawMoney(model.accountNumber, model.amount);
+            await BankService.WithdrawMoney(model.accountNumber, model.amount ?? 0);
+            
             return changeModel;
         }
     }
